@@ -1,0 +1,27 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: helloqemu
+  namespace: openinfra
+spec:
+  template:
+    spec:
+      runtimeClassName: kata-qemu
+      containers:
+        - image: harbor.nbfc.io/nubificus/httpreply-oi:latest
+          env:
+            - name: RUNTIMECLASS
+              value: "qemu"
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: DomainMapping
+metadata:
+  name:  helloqemu.openinfra.nbfc.io
+  namespace: openinfra
+spec:
+  ref:
+    name: helloqemu
+    namespace: openinfra
+    kind: Service
+    apiVersion: serving.knative.dev/v1
+
