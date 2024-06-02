@@ -1,0 +1,27 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: hellors
+  namespace: openinfra
+spec:
+  template:
+    spec:
+      runtimeClassName: kata-rs
+      containers:
+        - image: harbor.nbfc.io/nubificus/httpreply-oi:latest
+          env:
+            - name: RUNTIMECLASS
+              value: "dragonball"
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: DomainMapping
+metadata:
+  name:  hellors.openinfra.nbfc.io
+  namespace: openinfra
+spec:
+  ref:
+    name: hellors
+    namespace: openinfra
+    kind: Service
+    apiVersion: serving.knative.dev/v1
+

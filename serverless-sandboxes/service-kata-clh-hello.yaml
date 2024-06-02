@@ -1,0 +1,27 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: helloclh
+  namespace: openinfra
+spec:
+  template:
+    spec:
+      runtimeClassName: kata-clh
+      containers:
+        - image: harbor.nbfc.io/nubificus/httpreply-oi:latest
+          env:
+            - name: RUNTIMECLASS
+              value: "cloud-hypervisor"
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: DomainMapping
+metadata:
+  name:  helloclh.openinfra.nbfc.io
+  namespace: openinfra
+spec:
+  ref:
+    name: helloclh
+    namespace: openinfra
+    kind: Service
+    apiVersion: serving.knative.dev/v1
+

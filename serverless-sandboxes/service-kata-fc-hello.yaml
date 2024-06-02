@@ -1,0 +1,27 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: hellofc
+  namespace: openinfra
+spec:
+  template:
+    spec:
+      runtimeClassName: kata-fc
+      containers:
+        - image: harbor.nbfc.io/nubificus/httpreply-oi:latest
+          env:
+            - name: RUNTIMECLASS
+              value: "firecracker"
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: DomainMapping
+metadata:
+  name:  hellofc.openinfra.nbfc.io
+  namespace: openinfra
+spec:
+  ref:
+    name: hellofc
+    namespace: openinfra
+    kind: Service
+    apiVersion: serving.knative.dev/v1
+
